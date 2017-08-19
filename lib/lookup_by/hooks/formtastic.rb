@@ -5,11 +5,7 @@ module LookupBy
     module Formtastic
       extend ActiveSupport::Concern
 
-      included do
-        alias_method_chain :input, :lookup
-      end
-
-      def input_with_lookup(method, options = {})
+      def input(method, options = {})
         klass = object.class
 
         if klass.respond_to?(:lookups) && klass.lookups.include?(method.to_sym)
@@ -17,11 +13,9 @@ module LookupBy
 
           options[:collection] ||= target.pluck(target.lookup.field) if target.lookup.has_cache?
         end
-
-        input_without_lookup(method, options)
       end
     end
   end
 end
 
-::Formtastic::FormBuilder.send :include, LookupBy::Hooks::Formtastic
+::Formtastic::FormBuilder.send :prepend, LookupBy::Hooks::Formtastic
