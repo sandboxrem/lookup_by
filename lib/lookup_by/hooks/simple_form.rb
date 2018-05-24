@@ -13,6 +13,7 @@ module LookupBy
 
           options[:collection] ||= target.pluck(target.lookup.field) if target.lookup.has_cache?
         end
+        super
       end
     end
   end
